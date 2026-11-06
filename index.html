@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Місія «Відродження України» · Біологічний загін</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&family=Unbounded:wght@900&display=swap&subset=cyrillic" rel="stylesheet">
+<style>
+:root{--d:#04323a;--t:#0b8f8c;--m:#d3f8ee;--c:#ff7a59}
+*{box-sizing:border-box}
+body{margin:0;font:800 20px/1.5 Nunito,"Segoe UI",Arial,sans-serif;color:var(--d);background:linear-gradient(160deg,#0a6e75,#19a9a0 55%,#7fdcc9) fixed;min-height:100vh}
+h1,h2,h3{font-family:Unbounded,Nunito,sans-serif;font-weight:900;line-height:1.2;margin:.3em 0}
+h1{font-size:clamp(26px,5vw,44px)} h2{font-size:clamp(22px,3.5vw,32px)} h3{font-size:22px}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:24px;box-shadow:0 10px 30px #04323a55;overflow:hidden}
+.head{background:linear-gradient(135deg,#04323a,#0a6e75);color:#fff;padding:22px 28px}
+.head p{margin:0;font-size:20px}
+.pad{padding:24px 28px}
+label{display:block;margin:14px 0 6px;font-size:20px}
+input,select{font:inherit;font-weight:800;width:100%;padding:14px 16px;border:3px solid #9fdcd2;border-radius:16px;background:#fff;color:var(--d)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.btn{font:inherit;font-weight:900;font-size:22px;border:0;border-radius:999px;padding:14px 30px;background:var(--c);color:var(--d);box-shadow:0 5px 0 #c4553a;cursor:pointer;margin:14px 10px 0 0}
+.btn.alt{background:var(--m);box-shadow:0 5px 0 #8fcfc2}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #c4553a}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:4px solid var(--c);outline-offset:2px}
+.hexbar{display:flex;gap:10px;justify-content:center;padding:12px;background:#04323a}
+.hx{width:62px;height:70px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:#ffffff30;color:#fff;display:grid;place-items:center;font:900 28px Unbounded,sans-serif}
+.hx.on{background:linear-gradient(135deg,#fff,#9fe8d6);color:var(--d)}
+.map{position:relative;aspect-ratio:1672/941;background:#7fdcc9 url(fon.png) center/cover;border:6px solid #fff;border-radius:0 0 24px 24px}
+.pin{position:absolute;transform:translate(-50%,-50%);border:0;background:none;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.pin i{font-style:normal;width:clamp(46px,7vw,74px);height:clamp(46px,7vw,74px);border-radius:50%;background:#fff;border:5px solid var(--t);display:grid;place-items:center;font-size:clamp(20px,3.4vw,34px);box-shadow:0 4px 14px #04323a80}
+.pin b{background:#fff;color:var(--d);padding:3px 12px;border-radius:999px;font-size:clamp(13px,1.9vw,19px);box-shadow:0 2px 8px #04323a60;white-space:nowrap}
+.pin.cur i{background:var(--c);border-color:#fff;animation:pl 1.4s infinite}
+.pin.ok i{background:#2fbf8f;border-color:#fff;color:#fff}
+.pin.lock{cursor:not-allowed;filter:grayscale(.7);opacity:.85}
+@keyframes pl{50%{box-shadow:0 0 0 14px #ff7a5966}}
+@media(prefers-reduced-motion:reduce){.pin.cur i{animation:none}}
+.q{background:#effcf8;border-radius:18px;padding:14px 18px;margin:14px 0;border:3px solid transparent}
+.q.good{border-color:#1a9e5a}.q.bad{border-color:#e0452c}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0;align-items:center}
+.chip{font:inherit;font-weight:800;border:3px solid var(--t);background:#fff;color:var(--d);border-radius:14px;padding:8px 16px;cursor:pointer}
+.chip.on{background:var(--t);color:#fff}
+.ans{min-height:56px;background:#fff;border-radius:14px;padding:6px;border:3px dashed #9fdcd2}
+.hint{opacity:.7}
+.legend{background:var(--m);border-left:8px solid var(--t);padding:12px 18px;border-radius:12px}
+#res{margin:14px 0 0;font-size:22px}#res.ok{color:#0b7a4a}#res.no{color:#c0321b}
+.pop{position:fixed;inset:0;background:#04323aee;display:grid;place-items:center;text-align:center;color:#fff;padding:20px;z-index:9}
+.pop .big{width:170px;height:190px;margin:0 auto 10px;font-size:90px}
+.slots,.tray{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+.slot{width:86px;height:98px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:#bfeee3;display:grid;place-items:center;font:900 40px Unbounded,sans-serif}
+.tb{width:92px;height:104px;border:0;cursor:pointer;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(135deg,#fff,#8fe3cf);color:var(--d);font:900 42px Unbounded,sans-serif}
+.tb:disabled{opacity:.25;cursor:default}
+.shake{animation:sk .4s}@keyframes sk{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+canvas{width:100%;max-width:540px;border-radius:20px;box-shadow:0 10px 30px #04323a80}
+@media(max-width:600px){body{font-size:18px}.two{grid-template-columns:1fr}.hx{width:50px;height:58px;font-size:22px}.pad{padding:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section class="scr" id="start">
+ <div class="card">
+  <div class="head"><p>Тиждень природничих наук · ліцей «Сузір’я»</p><h1>Місія «Відродження України»</h1><p>Біологічний загін штабу «Сузір’я»</p></div>
+  <div class="pad">
+   <p>Річка замовкла, поле мертве, у місті не чути птахів, а життя потребує допомоги. Пройди п’ять біологічних станцій, виконай завдання й збери літери відродження. У штабі вони складуться в головне слово місії.</p>
+   <label for="nm">Прізвище та ім’я</label><input id="nm" placeholder="Наприклад: Коваленко Марія" autocomplete="off">
+   <div class="two"><div><label for="cl">Клас</label><select id="cl"><option value="">Обери</option></select></div>
+   <div><label for="lt">Літера класу</label><select id="lt"><option value="">Без літери</option><option>А</option><option>Б</option><option>В</option><option>Г</option><option>Д</option></select></div></div>
+   <p id="er" style="color:#c0321b"></p>
+   <button class="btn" id="begin">Розпочати місію</button>
+  </div>
+ </div>
+</section>
+
+<section class="scr" id="map" hidden>
+ <div class="card"><div class="hexbar" id="bar"></div><div class="map" id="mp"></div></div>
+</section>
+
+<section class="scr" id="task" hidden>
+ <div class="card"><div class="head"><h2 id="tt"></h2></div>
+  <div class="pad">
+   <p class="legend" id="lg"></p>
+   <p id="tk"></p>
+   <div id="body"></div>
+   <p id="res"></p>
+   <button class="btn" id="go">Перевірити</button><button class="btn alt" id="back">До мапи</button>
+  </div></div>
+</section>
+
+<section class="scr" id="hq" hidden>
+ <div class="card"><div class="head"><h1>Штаб «Сузір’я»</h1></div>
+  <div class="pad" style="text-align:center">
+   <p>Усі станції пройдено! Літери перемішалися. Натискай їх по черзі й склади головне слово місії. Підказка: це те, що ми рятуємо й бережемо.</p>
+   <div class="slots" id="slots"></div>
+   <div class="tray" id="tray"></div>
+   <p id="hqm"></p>
+   <button class="btn alt" id="rst">Почати слово заново</button>
+  </div></div>
+</section>
+
+<section class="scr" id="cert" hidden>
+ <div style="text-align:center">
+  <canvas id="cv" width="1080" height="1350"></canvas><br>
+  <button class="btn" id="dl">Зберегти сертифікат</button><button class="btn alt" onclick="location.reload()">Почати знову</button>
+ </div>
+</section>
+
+</div>
+<div class="pop" id="pop" hidden><div><div class="hx on big" id="pl"></div><h2>Ти отримав(ла) літеру!</h2><p id="pm"></p><button class="btn" id="pk">На мапу</button></div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const sh=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const show=id=>{document.querySelectorAll(".scr").forEach(s=>s.hidden=s.id!==id);scrollTo(0,0)};
+for(let i=5;i<=11;i++)$("cl").add(new Option(i,i));
+
+const TF=["Так","Ні"];
+const ST=[
+{n:"Біолабораторія «Жива річка»",s:"Жива річка",p:[17,30],L:"Т",ic:"💧",type:"order",
+ lg:"Річка оживає, але її мешканці розгубилися: хто кого їсть? Допоможіть відновити «меню» річки, бо без нього вона не буде жити.",
+ tk:"Встанови правильну послідовність у двох харчових ланцюгах. Починай з того, кого їдять першим. Стрілка означає «його з’їдає».",
+ chains:[{t:"Ланцюг А",i:["мікроскопічні водорості","рачок-дафнія","верховодка","форель","видра"]},{t:"Ланцюг Б",i:["опале листя","рачок-бокоплав","піскар","чапля"]}]},
+{n:"Біодетективи «Слід у ґрунті»",s:"Слід у ґрунті",p:[50,23],L:"Я",ic:"🪱",type:"choice",
+ lg:"На полі після війни щось негаразд: ґрунт мертвий і не родить. Біодетективам потрібно знайти «підозрюваних» і зрозуміти, хто повернув би життя в землю.",
+ tk:"Допитай «свідків». Кожне твердження правдиве (Так) чи хибне (Ні)?",
+ qs:[
+ ["Дощовий черв’як риє ходи й переробляє рослинні рештки, тому робить ґрунт родючішим.",TF,0],
+ ["Чим менше у ґрунті живих організмів, тим він родючіший.",TF,1],
+ ["Бактерії й гриби розкладають мертві рештки до речовин, які знову засвоюють рослини.",TF,0],
+ ["Гумус утворюється з мінеральних порід без участі живих істот.",TF,1],
+ ["Бульбочкові бактерії на коренях гороху й люпину збагачують ґрунт сполуками Нітрогену.",TF,0],
+ ["Щоб оживити мертвий ґрунт, достатньо залити його великою кількістю води.",TF,1]]},
+{n:"Фотосинтез-центр «Сонячний листок»",s:"Сонячний листок",p:[82,23],L:"Ж",ic:"🍃",type:"sel",
+ lg:"Щоб у домівках було світло, потрібна енергія. Найстаріша електростанція планети працює в листку.",
+ tk:"Встав пропущені слова. Кожне слово підходить лише один раз: світло, хлорофіл, глюкоза, кисень, вуглекислий газ.",
+ o:["світло","хлорофіл","глюкоза","кисень","вуглекислий газ"],
+ r:[["Зелений пігмент у хлоропластах називається __.","хлорофіл"],["Для фотосинтезу листок потребує __ Сонця.","світло"],["З повітря рослина поглинає __.","вуглекислий газ"],["Органічна речовина, що утворюється під час фотосинтезу, — це __.","глюкоза"],["Газ, який виділяється під час фотосинтезу, — це __.","кисень"]]},
+{n:"Бюро біоніки «Ідея від природи»",s:"Ідея від природи",p:[17,74],L:"Т",ic:"🤖",type:"sel",
+ lg:"Місто будується заново, а найкращі ідеї для нього вже придумала природа.",
+ tk:"З’єднай природний «прототип» із винаходом, який він надихнув.",
+ r:[["Плід реп’яха з гачечками →","Застібка-липучка"],["Листок лотоса →","Фарба, що самоочищується від бруду"],["Термітник →","Будівля з природною вентиляцією без кондиціонерів"],["Кажан і дельфін →","Сонар і ехолокатор"],["Шкіра акули →","Покриття для суден, що зменшує опір води"],["Павутина →","Надміцні волокна для захисного одягу"]]},
+{n:"Екопост «Хто це співає?»",s:"Хто це співає?",p:[84,68],L:"И",ic:"🐦",type:"choice",
+ lg:"Повітря в оновленому місті стало чистим, і до нього повертаються птахи. Екологи ведуть облік «співочих сусідів», але вдалося записати лише їхні голоси та описи.",
+ tk:"Визнач птаха за голосом і описом. Обери одну правильну відповідь.",
+ qs:[
+ ["Дзвінке «ци-ци-пі». Пташка маленька, з жовтим черевцем, блакитною шапочкою та чорною смужкою через око.",["горобець","синиця блакитна (лазорівка)","шпак","дятел"],1],
+ ["Звучить ритмічне «ку-ку». Птах підкидає яйця в чужі гнізда.",["одуд","сойка","зозуля","ластівка"],2],
+ ["Швидка барабанна дріб по стовбуру. Міцний дзьоб і червона пляма на потилиці.",["строкатий дятел","повзик","іволга","боривітер"],0],
+ ["Уночі лунає протяжне «у-гу-у». Великі очі, безшумний політ, ловить мишей і полівок.",["жайворонок","сова","ластівка","дрізд"],1],
+ ["Гучні переливи з «тьохканням», найчастіше вночі в кущах. Сам непоказний, сірувато-бурий.",["соловей","снігур","сойка","сорока"],0]]}
+];
+
+/* конструктори завдань: кожен повертає функцію перевірки → [правильно, усього] */
+const B={
+order(s,box){
+ const ch=s.chains.map(c=>({c,pool:sh(c.i),a:[]}));
+ const draw=()=>{box.innerHTML="";ch.forEach(o=>{
+  const d=el("div","q");d.append(el("h3",0,o.c.t));
+  const a=el("div","row ans");
+  o.a.forEach((x,k)=>{const b=el("button","chip on",(k?"→ ":"")+x);b.onclick=()=>{o.a.splice(k,1);o.pool.push(x);draw()};a.append(b)});
+  if(!o.a.length)a.append(el("span","hint","Натискай картки по порядку…"));
+  const p=el("div","row");
+  o.pool.forEach(x=>{const b=el("button","chip",x);b.onclick=()=>{o.pool.splice(o.pool.indexOf(x),1);o.a.push(x);draw()};p.append(b)});
+  o.n=d;d.append(a,p);box.append(d)})};
+ draw();
+ return()=>{let ok=0;ch.forEach(o=>{const g=o.a.join()==o.c.i.join();ok+=g;o.n.classList.toggle("good",g);o.n.classList.toggle("bad",!g)});return[ok,ch.length]}},
+choice(s,box){
+ const v=s.qs.map(()=>-1),nodes=[];
+ s.qs.forEach((q,k)=>{
+  const d=el("div","q");d.append(el("p",0,(k+1)+". "+q[0]));
+  const r=el("div","row");
+  q[1].forEach((t,j)=>{const b=el("button","chip",(q[1]==TF?"":"АБВГ"[j]+") ")+t);
+   b.onclick=()=>{v[k]=j;[...r.children].forEach((c,x)=>c.classList.toggle("on",x==j))};r.append(b)});
+  d.append(r);nodes.push(d);box.append(d)});
+ return()=>{let ok=0;s.qs.forEach((q,k)=>{const g=v[k]==q[2];ok+=g;nodes[k].classList.toggle("good",g);nodes[k].classList.toggle("bad",!g)});return[ok,s.qs.length]}},
+sel(s,box){
+ const opts=s.o||sh(s.r.map(x=>x[1])),sels=[],nodes=[];
+ s.r.forEach((q,k)=>{
+  const d=el("div","q"),se=el("select");se.add(new Option("Обери…",""));opts.forEach(o=>se.add(new Option(o,o)));
+  if(q[0].includes("__")){const [a,b]=q[0].split("__");d.append(el("span",0,(k+1)+". "+a),se,el("span",0," "+b.trim()))}
+  else d.append(el("p",0,(k+1)+". "+q[0]),se);
+  sels.push(se);nodes.push(d);box.append(d)});
+ return()=>{let ok=0;s.r.forEach((q,k)=>{const g=sels[k].value==q[1];ok+=g;nodes[k].classList.toggle("good",g);nodes[k].classList.toggle("bad",!g)});return[ok,s.r.length]}}
+};
+
+/* стан гри */
+let done=[0,0,0,0,0],cur=0,chk,fails=0,P={};
+
+$("begin").onclick=()=>{
+ const n=$("nm").value.trim(),c=$("cl").value;
+ if(n.length<3||!c){$("er").textContent="Впиши прізвище та ім’я й обери клас.";return}
+ P={n,c,l:$("lt").value};renderMap();show("map")};
+
+function renderMap(){
+ const bar=$("bar");bar.innerHTML="";
+ ST.forEach((s,i)=>{const h=el("div","hx"+(done[i]?" on":""),done[i]?s.L:"?");bar.append(h)});
+ const mp=$("mp");mp.innerHTML="";
+ const first=done.indexOf(0),all=first<0;
+ ST.forEach((s,i)=>{
+  const st=done[i]?"ok":i==first?"cur":"lock";
+  const b=el("button","pin "+st);b.style.left=s.p[0]+"%";b.style.top=s.p[1]+"%";
+  b.append(el("i",0,done[i]?"✓":st=="lock"?"🔒":s.ic),el("b",0,(i+1)+". "+s.s));
+  b.onclick=()=>{if(st!="lock")openSt(i)};mp.append(b)});
+ const h=el("button","pin "+(all?"cur":"lock"));h.style.left="50%";h.style.top="58%";
+ h.append(el("i",0,all?"🔭":"🔒"),el("b",0,"Штаб «Сузір’я»"));
+ h.onclick=()=>{if(all)openHQ()};mp.append(h)}
+
+function openSt(i){
+ cur=i;const s=ST[i];
+ $("tt").textContent="Станція "+(i+1)+". "+s.n;$("lg").textContent=s.lg;$("tk").textContent=s.tk;
+ $("body").innerHTML="";$("res").textContent="";$("res").className="";
+ chk=B[s.type](s,$("body"));show("task")}
+
+$("back").onclick=()=>{renderMap();show("map")};
+$("go").onclick=()=>{
+ const [ok,n]=chk(),need=Math.ceil(n*.7),r=$("res");
+ if(ok>=need){
+  done[cur]=1;r.className="ok";r.textContent="Правильно "+ok+" з "+n+". Станцію зараховано!";
+  $("pl").textContent=ST[cur].L;$("pm").textContent="Станція «"+ST[cur].s+"» виконана. Запам’ятай літеру: у штабі з них складеться слово.";
+  setTimeout(()=>$("pop").hidden=false,700)}
+ else{fails++;r.className="no";r.textContent="Правильно "+ok+" з "+n+". Потрібно щонайменше "+need+". Виправ відповіді, позначені червоним, і перевір ще раз."}};
+$("pk").onclick=()=>{$("pop").hidden=true;renderMap();show("map")};
+
+/* штаб: складання слова */
+const WORD="ЖИТТЯ";let placed=[];
+function openHQ(){placed=[];$("hqm").textContent="";drawHQ();show("hq")}
+function drawHQ(){
+ const sl=$("slots"),tr=$("tray");sl.innerHTML="";tr.innerHTML="";
+ for(let i=0;i<5;i++)sl.append(el("div","slot",placed[i]?placed[i].L:""));
+ const order=ST.map((s,i)=>({L:s.L,i}));
+ order.forEach(o=>{const b=el("button","tb",o.L);b.disabled=placed.some(p=>p.i==o.i);
+  b.onclick=()=>{placed.push(o);drawHQ();if(placed.length==5)checkWord()};tr.append(b)})}
+function checkWord(){
+ const w=placed.map(p=>p.L).join("");
+ if(w==WORD){$("hqm").textContent="Слово «ЖИТТЯ» складено! Готуємо сертифікат…";setTimeout(makeCert,900)}
+ else{$("hqm").textContent="Це слово не підходить. Спробуй інший порядок літер.";$("slots").classList.add("shake");
+  setTimeout(()=>{$("slots").classList.remove("shake");placed=[];drawHQ()},900)}}
+$("rst").onclick=()=>{placed=[];$("hqm").textContent="";drawHQ()};
+
+/* сертифікат */
+function hexPath(c,x,y,r){c.beginPath();for(let k=0;k<6;k++){const a=Math.PI/180*(60*k-90);c[k?"lineTo":"moveTo"](x+r*Math.cos(a),y+r*Math.sin(a))}c.closePath()}
+function leaf(c,x,y,r,on){c.save();c.translate(x,y);c.rotate(.6);c.beginPath();c.moveTo(0,r);c.bezierCurveTo(r*1.1,r*.4,r*.9,-r*.6,0,-r);c.bezierCurveTo(-r*.9,-r*.6,-r*1.1,r*.4,0,r);c.closePath();
+ c.fillStyle=on?"#b9f7d4":"#ffffff33";c.fill();if(on){c.strokeStyle="#ffffff";c.lineWidth=3;c.stroke();c.beginPath();c.moveTo(0,r);c.lineTo(0,-r*.8);c.strokeStyle="#2c9a78";c.stroke()}c.restore()}
+function wrap(c,t,x,y,w,lh){let l="";for(const wd of t.split(" ")){const tt=l?l+" "+wd:wd;if(c.measureText(tt).width>w&&l){c.fillText(l,x,y);y+=lh;l=wd}else l=tt}c.fillText(l,x,y)}
+
+async function makeCert(){
+ show("cert");
+ try{await Promise.all([document.fonts.load("900 40px Unbounded"),document.fonts.load("800 30px Nunito")])}catch(e){}
+ const cv=$("cv"),c=cv.getContext("2d"),W=1080,H=1350,U="Unbounded,Nunito,Arial,sans-serif",N="Nunito,Arial,sans-serif";
+ const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,"#04323a");g.addColorStop(.5,"#0b7378");g.addColorStop(1,"#4cc2b0");
+ c.fillStyle=g;c.fillRect(0,0,W,H);
+ c.fillStyle="#ffffff";for(let i=0;i<110;i++){c.globalAlpha=Math.random()*.5+.1;c.beginPath();c.arc(Math.random()*W,Math.random()*H*.7,Math.random()*2+.5,0,7);c.fill()}
+ c.globalAlpha=1;c.textAlign="center";
+ c.fillStyle="#ffb199";c.font="900 34px "+U;c.fillText("ШТАБ «СУЗІР’Я»",W/2,110);
+ c.fillStyle="#fff";c.font="900 74px "+U;c.fillText("Місію виконано!",W/2,205);
+ /* сузір’я з листків */
+ const pts=[[372,285],[400,365],[415,345],[450,288],[585,340],[648,462],[665,450]];
+ c.strokeStyle="#d3f8ee";c.lineWidth=3;c.globalAlpha=.7;c.beginPath();[0,1,2,3,4,5,6].forEach((k,i)=>c[i?"lineTo":"moveTo"](...pts[k]));c.stroke();c.globalAlpha=1;
+ pts.forEach(p=>{c.shadowColor="#b9f7d4";c.shadowBlur=24;leaf(c,p[0],p[1],20,1)});c.shadowBlur=0;
+ c.fillStyle="#d3f8ee";c.font="800 31px "+N;c.fillText("Місія «Відродження України» · біологічний загін",W/2,590);
+ /* літери */
+ [...WORD].forEach((L,i)=>{const x=197+i*172,y=745;hexPath(c,x,y,88);const f=c.createLinearGradient(x-80,y-80,x+80,y+80);f.addColorStop(0,"#ffffff");f.addColorStop(1,"#8fe3cf");c.fillStyle=f;c.fill();
+  c.fillStyle="#04323a";c.font="900 84px "+U;c.textBaseline="middle";c.fillText(L,x,y+4);c.textBaseline="alphabetic"});
+ const lv=Math.max(1,5-fails);for(let i=0;i<5;i++)leaf(c,400+i*70,905,28,i<lv);
+ c.fillStyle="#fff";c.font="900 40px "+N;wrap(c,"Я оживив(ла) річку, ґрунт, листок, місто й пташині голоси!",W/2,985,900,54);
+ /* плашка */
+ c.fillStyle="#ffffff30";c.beginPath();c.roundRect(60,1095,960,170,36);c.fill();
+ c.fillStyle="#ff9b7d";c.beginPath();c.roundRect(84,1119,230,122,22);c.fill();
+ c.fillStyle="#04323a";c.font="900 70px "+U;c.fillText(P.c+(P.l?"-"+P.l:""),199,1195);c.font="900 24px "+N;c.fillText("клас",199,1228);
+ const d=new Date(),p2=n=>String(n).padStart(2,"0");
+ const num="БЗ-"+p2(Math.floor(Math.random()*9999)).padStart(4,"0");
+ c.textAlign="left";c.fillStyle="#fff";c.font="900 44px "+N;c.fillText("№ "+num,350,1152);
+ c.font="900 32px "+N;let nm=P.n;while(c.measureText(nm).width>650&&nm.length>3)nm=nm.slice(0,-1);c.fillText(nm,350,1195);
+ c.fillStyle="#d3f8ee";c.font="800 28px "+N;c.fillText(p2(d.getDate())+"."+p2(d.getMonth()+1)+"."+d.getFullYear()+", "+p2(d.getHours())+":"+p2(d.getMinutes()),350,1236);
+ c.textAlign="center";c.fillStyle="#ffb199";c.font="900 34px "+N;c.fillText("#МісіяВідродження #Сузір’я #БіологічнийЗагін",W/2,1318);
+ $("dl").onclick=()=>{const a=document.createElement("a");a.download="sertyfikat-"+num+".png";a.href=cv.toDataURL("image/png");a.click()}}
+</script>
+</body>
+</html>
